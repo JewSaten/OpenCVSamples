@@ -16,7 +16,9 @@ endif
 
 LOCAL_MODULE := OpenCV
 
-LOCAL_SRC_FILES := io_jewsaten_opencvsamples_OpenCVUtil.cpp
+CPP_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
+
+LOCAL_SRC_FILES := $(CPP_FILES:$(LOCAL_PATH)/%=%)
 
 LOCAL_LDLIBS +=  -lm -llog -latomic
 
