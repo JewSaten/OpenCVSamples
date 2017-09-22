@@ -5,19 +5,34 @@
     android:layout_height="match_parent"
     tools:context="io.jewsaten.opencvsamples.MainActivity">
 
-    <Button
+    <LinearLayout
         android:id="@+id/btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="图片灰度处理" />
+        android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btnJava"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="Java"
+            android:text="图片灰度处理(Java)" />
+
+        <Button
+            android:id="@+id/btnNative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="Native"
+            android:text="图片灰度处理(Native)" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:layout_below="@+id/btn"
         android:src="@mipmap/image" />
-
 
 </RelativeLayout>

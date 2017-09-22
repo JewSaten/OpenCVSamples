@@ -7,5 +7,10 @@ import android.widget.ImageView;
  */
 
 public interface OnGrayImageListener {
-    void doGrayImage(ImageView target);
+    String WITH_JAVA = "Java";
+    String WITH_NATIVE = "Native";
+
+    void doGrayWithJava(ImageView target);
+
+    void doGrayWithNative(ImageView target);
 }
