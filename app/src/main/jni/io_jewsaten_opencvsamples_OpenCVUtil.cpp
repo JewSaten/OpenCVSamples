@@ -9,6 +9,7 @@
 #define JNI_FUNC(FUN) Java_##CLASS##_##FUN
 
 using namespace cv;
+using namespace std;
 
 extern "C" {
 
@@ -43,28 +44,43 @@ extern "C" {
 //动态注册
 JNIEXPORT jintArray JNICALL gray(JNIEnv *env, jclass clazz, jintArray buf, jint w, jint h){
 
-    jint *cbuf;
-    cbuf = env->GetIntArrayElements(buf, JNI_FALSE);
-    if (cbuf == NULL) {
+//    jint *cbuf;
+//    cbuf = env->GetIntArrayElements(buf, JNI_FALSE);
+//    if (cbuf == NULL) {
+//        return 0;
+//    }
+//
+//    Mat imgData(h, w, CV_8UC4, (unsigned char *) cbuf);
+//
+//    uchar* ptr = imgData.ptr(0);
+//    for(int i = 0; i < w*h; i ++){
+//        int grayScale = (int)(ptr[4*i+2]*0.299 + ptr[4*i+1]*0.587 + ptr[4*i+0]*0.114);
+//        ptr[4*i+1] = grayScale;
+//        ptr[4*i+2] = grayScale;
+//        ptr[4*i+0] = grayScale;
+//    }
+//
+//    int size = w * h;
+//    jintArray result = env->NewIntArray(size);
+//    env->SetIntArrayRegion(result, 0, size, cbuf);
+//    env->ReleaseIntArrayElements(buf, cbuf, 0);
+//    return result;
+    jboolean ptfalse = false;
+    jint* srcBuf = env->GetIntArrayElements(buf, &ptfalse);
+    if(srcBuf == NULL){
         return 0;
     }
+    int size=w * h;
 
-    Mat imgData(h, w, CV_8UC4, (unsigned char *) cbuf);
+    Mat srcImage(h, w, CV_8UC4, (unsigned char*)srcBuf);
+    Mat grayImage;
+    cvtColor(srcImage, grayImage, COLOR_BGRA2GRAY);
+    cvtColor(grayImage, srcImage, COLOR_GRAY2BGRA);
 
-    uchar* ptr = imgData.ptr(0);
-    for(int i = 0; i < w*h; i ++){
-        int grayScale = (int)(ptr[4*i+2]*0.299 + ptr[4*i+1]*0.587 + ptr[4*i+0]*0.114);
-        ptr[4*i+1] = grayScale;
-        ptr[4*i+2] = grayScale;
-        ptr[4*i+0] = grayScale;
-    }
-
-    int size = w * h;
     jintArray result = env->NewIntArray(size);
-    env->SetIntArrayRegion(result, 0, size, cbuf);
-    env->ReleaseIntArrayElements(buf, cbuf, 0);
+    env->SetIntArrayRegion(result, 0, size, srcBuf);
+    env->ReleaseIntArrayElements(buf, srcBuf, 0);
     return result;
-
 }
 
 static JNINativeMethod gMethods[] = {
